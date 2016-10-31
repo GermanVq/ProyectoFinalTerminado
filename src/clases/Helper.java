@@ -132,18 +132,7 @@ public class Helper {
             
         }
     }
-    public static void listadoBuscar(JTable tabla, String ruta, String Buscar ){
-        ArrayList<Usuarios> personas = traerDatos(ruta);
-        ArrayList<Usuarios> personasFiltradas = new ArrayList();
-        for (int i = 0; i < personas.size(); i++) {
-          if(personas.get(i).getApellido().equals(Buscar)){
-              personasFiltradas.add(personas.get(i));
-          }
-            
-        }
-        llenarTabla(tabla, personasFiltradas);
-        
-    }
+   
         
   
 }

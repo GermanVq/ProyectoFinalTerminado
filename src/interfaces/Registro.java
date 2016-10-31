@@ -34,15 +34,8 @@ public class Registro extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         ruta = "src/datos/cuenta.txt";
-        try {
-            personas = Helper.traerDatos(ruta);
-            salida = new ObjectOutputStream(new FileOutputStream(ruta));
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        Helper.volcado(salida, personas);
-        
-    
+       
+       
     }
 
     /**
