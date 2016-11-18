@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
  *
  * @author rmorales1
  */
-public class Usuarios implements java.io.Serializable{
+public class Usuario implements java.io.Serializable{
     private String cedula;
     private String nombre;
     private String apellido;
@@ -22,7 +22,7 @@ public class Usuarios implements java.io.Serializable{
     private String Cargo;
     private String FechaIng;
 
-    public Usuarios(String cedula, String nombre, String apellido, String telefono, String Direccion, String correo, String Cargo, String FechaIng) {
+    public Usuario(String cedula, String nombre, String apellido, String telefono, String Direccion, String correo, String Cargo, String FechaIng) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -101,9 +101,27 @@ public class Usuarios implements java.io.Serializable{
     public void guardar(ObjectOutputStream salida) throws IOException{
         salida.writeObject(this);
     }
+    public boolean empiezaPor(String inicio) {
+        if(inicio.isEmpty() || inicio.length()>cedula.length())
+            return false;
+        for(int i=0; i<inicio.length(); ++i)
+            if( inicio.charAt(i) != cedula.charAt(i) )
+                return false;
+        return true;
+    }
     
-    
-    
+    @Override
+    public String toString() {
+        
+        return  "cedula:" + cedula +
+                "\nNombre completo: "+nombre+", "+apellido+
+                "\nTelefono: "+telefono+
+               "\nDireccion: "+Direccion+
+               "\ncorreo: "+correo+
+                "\ncargo: "+Cargo+
+                "\nFechaing: "+FechaIng;
+    }
+
         
 }
 

@@ -6,18 +6,28 @@
 package interfaces;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 /**
  *
  * @author Lenovo
  */
 public class Login extends javax.swing.JFrame {
+private Timer tiempo;
+int cont;
+public final static int TWO_SECOND=5;
+
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
+        jProgressBar.setVisible(false);
     }
     public Image getIconImage(){
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("imagenes/IconoG4.png"));
@@ -43,6 +53,7 @@ public class Login extends javax.swing.JFrame {
         txtContraseña = new javax.swing.JPasswordField();
         cmdIniciar = new javax.swing.JButton();
         cmdRegistro = new javax.swing.JButton();
+        jProgressBar = new javax.swing.JProgressBar();
         jLabel1Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,6 +92,11 @@ public class Login extends javax.swing.JFrame {
 
         txtContraseña.setBackground(new java.awt.Color(0, 0, 51));
         txtContraseña.setForeground(new java.awt.Color(255, 255, 255));
+        txtContraseña.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtContraseñaKeyPressed(evt);
+            }
+        });
         jPanel1.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 350, 200, -1));
 
         cmdIniciar.setBackground(new java.awt.Color(0, 0, 51));
@@ -92,7 +108,7 @@ public class Login extends javax.swing.JFrame {
                 cmdIniciarActionPerformed(evt);
             }
         });
-        jPanel1.add(cmdIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 390, 140, -1));
+        jPanel1.add(cmdIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 380, 140, -1));
 
         cmdRegistro.setBackground(new java.awt.Color(0, 0, 51));
         cmdRegistro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -103,10 +119,15 @@ public class Login extends javax.swing.JFrame {
                 cmdRegistroActionPerformed(evt);
             }
         });
-        jPanel1.add(cmdRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 130, -1));
+        jPanel1.add(cmdRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 130, -1));
+
+        jProgressBar.setBackground(new java.awt.Color(0, 0, 51));
+        jProgressBar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jProgressBar.setForeground(new java.awt.Color(0, 0, 51));
+        jPanel1.add(jProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 180, 20));
 
         jLabel1Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/1197772936,Longhorn-Wallpaper.jpg"))); // NOI18N
-        jPanel1.add(jLabel1Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 420));
+        jPanel1.add(jLabel1Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,16 +153,55 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdRegistroActionPerformed
 
     private void cmdIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdIniciarActionPerformed
-    Principal abrir = new Principal();  
-    abrir.setVisible(true);
-    this.setVisible(false);
-    
+   IniciarSeccion();
         
     }//GEN-LAST:event_cmdIniciarActionPerformed
+
+    private void txtContraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraseñaKeyPressed
+        if(evt.getKeyCode()== KeyEvent.VK_ENTER){
+            IniciarSeccion();
+        }
+    }//GEN-LAST:event_txtContraseñaKeyPressed
 
     /**
      * @param args the command line arguments
      */
+   class TimerListener implements ActionListener{
+       
+       
+    
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+         cont++;
+         jProgressBar.setValue(cont);
+         if(cont==100){
+             tiempo.stop();
+             esconder();
+             Principal abrir = new Principal();
+            abrir.setVisible(true);
+            setVisible(false);
+         }
+        }
+    }
+   public void esconder(){this.setVisible(false);}
+   public void activar(){tiempo.start();}
+    public void IniciarSeccion(){
+        String usuario=txtUsuario.getText();
+        String contraseña=String.valueOf(txtContraseña.getPassword());
+        
+        if(usuario.equals("admin")&& contraseña.compareTo("root123")==0){
+           jProgressBar.setVisible(true);
+            cont=-1;
+           jProgressBar.setValue(0);
+           jProgressBar.setStringPainted(true);
+           tiempo = new Timer(TWO_SECOND,new TimerListener());
+           activar();
+        }else{
+           JOptionPane.showMessageDialog(null,"Error al ingresar, usuario o contraseña son incorrectos");
+        }
+    }   
+       
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -183,6 +243,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1User1;
     private javax.swing.JLabel jLabelLoginUser;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JPasswordField txtContraseña;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

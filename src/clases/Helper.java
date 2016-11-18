@@ -6,18 +6,15 @@
 package clases;
 
 
-import interfaces.Agregar;
+
+import interfaces.ListadoEmpleados;
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -29,21 +26,29 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Helper {
 
-  public static void mensaje(Component ventana, String mensaje, int tipo) {
+  public static int mensaje(Component ventana, String info, String titulo,  int tipo) {
+        int retorno = -1;
         switch (tipo) {
             case 1:
-                JOptionPane.showMessageDialog(ventana, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(ventana, info, titulo, JOptionPane.INFORMATION_MESSAGE);
                 break;
             case 2:
-                JOptionPane.showMessageDialog(ventana, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(ventana, info, titulo, JOptionPane.ERROR_MESSAGE);
                 break;
             case 3:
-                JOptionPane.showMessageDialog(ventana, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                retorno = JOptionPane.showConfirmDialog(ventana, info, titulo, JOptionPane.YES_NO_OPTION);
                 break;
-
+            
         }
+        return retorno;
     }
-
+  
+  
+      public static String recibirDatos(Component ventana, String info) {
+        String aux;
+        aux = JOptionPane.showInputDialog(ventana, info);
+        return aux;
+    }
     public static void limpiadoTabla(JTable tabla1) {
         int nf, nc;
         nc = tabla1.getColumnCount();
@@ -81,7 +86,7 @@ public class Helper {
     public static void llenarTabla(JTable tabla, String ruta){
         DefaultTableModel tm;
         int nf;
-        ArrayList<Usuarios> personas = traerDatos(ruta);
+        ArrayList<Usuario> personas = traerDatos(ruta);
         tm = (DefaultTableModel)tabla.getModel();
         limpiadoTabla(tabla);
         nf = personas.size();
@@ -132,7 +137,73 @@ public class Helper {
             
         }
     }
-   
-        
-  
+       public static boolean buscarPorCedula(String cedula, String ruta){
+        ArrayList<Usuario> personas = traerDatos(ruta);
+        for (int i = 0; i < personas.size(); i++) {
+            if(personas.get(i).getCedula().equals(cedula)){
+                return true;
+            }
+            
+        }
+        return false;
+    }
+    
+    public static Usuario traerPersona(String cedula,String ruta){
+        ArrayList<Usuario> personas = traerDatos(ruta);
+        for (int i = 0; i < personas.size(); i++) {
+            if(personas.get(i).getCedula().equals(cedula)){
+                return personas.get(i);
+            }
+            
+        }
+        return null;
+    }
+    
+    public static ArrayList<Usuario> actualizarPersona(String ruta, String cedula, String nombre, String apellido, String Telefono, String Direccion, String Correo,String Cargo, String FechaIng){
+        ArrayList<Usuario> personas = traerDatos(ruta);
+        for (int i = 0; i < personas.size(); i++) {
+          if(personas.get(i).getCedula().equals(cedula)){
+                personas.get(i).setNombre(nombre);
+                personas.get(i).setApellido(apellido);
+                personas.get(i).setTelefono(Telefono);
+                personas.get(i).setDireccion(Direccion);
+                personas.get(i).setCorreo(Correo);
+                personas.get(i).setCargo(Cargo);
+                personas.get(i).setFechaIng(FechaIng);
+                
+                i=personas.size();
+            }
+        }
+        return personas;
+    }
+    
+    public static ArrayList<Usuario> actualizarPersona(String ruta, Usuario p){
+        ArrayList<Usuario> personas = traerDatos(ruta);
+        for (int i = 0; i < personas.size(); i++) {
+          if(personas.get(i).getCedula().equals(p.getCedula())){
+                personas.get(i).setNombre(p.getNombre());
+                personas.get(i).setApellido(p.getApellido());
+                personas.get(i).setTelefono(p.getTelefono());
+                personas.get(i).setDireccion(p.getDireccion());
+                personas.get(i).setCorreo(p.getCorreo());
+                personas.get(i).setCargo(p.getCargo());
+                personas.get(i).setFechaIng(p.getFechaIng());
+               
+                
+                
+                i=personas.size();
+            }
+        }
+        return personas;
+    }
+    public static void CatidadEmpleados(String ruta){
+        ArrayList<Usuario> personas = traerDatos(ruta);
+        for(int i =0;i<personas.size(); i++ ){
+            
+        }
+    }
+
+    
+
 }
+  
